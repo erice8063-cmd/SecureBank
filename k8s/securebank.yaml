@@ -1,0 +1,224 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data
+  namespace: securebank
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-data
+  namespace: securebank
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 15Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: securebank
+spec:
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: securebank
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: bank_db
+            - name: MYSQL_USER
+              value: securebank
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-db
+                  key: DB_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-db
+                  key: MYSQL_ROOT_PASSWORD
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mysql-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama
+  namespace: securebank
+spec:
+  selector:
+    app: ollama
+  ports:
+    - port: 11434
+      targetPort: 11434
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: securebank
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+          ports:
+            - containerPort: 11434
+          readinessProbe:
+            tcpSocket:
+              port: 11434
+            periodSeconds: 5
+          volumeMounts:
+            - name: data
+              mountPath: /root/.ollama
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: ollama-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securebank
+  namespace: securebank
+spec:
+  selector:
+    app: securebank
+  ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securebank
+  namespace: securebank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: securebank
+  template:
+    metadata:
+      labels:
+        app: securebank
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull
+      initContainers:
+        - name: wait-for-db
+          image: mysql:8.4
+          env:
+            - name: MYSQL_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-db
+                  key: DB_PASSWORD
+          command:
+            - sh
+            - -c
+            - |
+              until mysql --connect-timeout=5 -h db -u securebank \
+                bank_db -e 'SELECT 1'; do
+                echo "Waiting for MySQL..."
+                sleep 5
+              done
+        - name: prepare-models
+          image: ollama/ollama:latest
+          env:
+            - name: OLLAMA_HOST
+              value: "http://ollama:11434"
+          command:
+            - sh
+            - -c
+            - |
+              until ollama list; do
+                echo "Waiting for Ollama..."
+                sleep 5
+              done
+              ollama pull llama3.2 &&
+              ollama pull nomic-embed-text
+      containers:
+        - name: securebank
+          image: ghcr.io/erice8063-cmd/securebank:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SERVER_ADDRESS
+              value: "0.0.0.0"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://db:3306/bank_db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: securebank
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: securebank-db
+                  key: DB_PASSWORD
+            - name: SPRING_AI_OLLAMA_BASE_URL
+              value: "http://ollama:11434"
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5

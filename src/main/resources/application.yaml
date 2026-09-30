@@ -1,5 +1,7 @@
 spring:
   datasource:
+    url: jdbc:mysql://localhost:3306/bank_db
+    username: securebank
     password: ${DB_PASSWORD}
 
   jpa:
