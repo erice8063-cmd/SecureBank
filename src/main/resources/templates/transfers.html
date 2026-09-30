@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfers | SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main>
+    <h1>Transfer Money</h1>
+    <p><a href="/home">Return to dashboard</a></p>
+    <p id="message" role="status"></p>
+
+    <form id="transferForm">
+        <label for="fromAccountId">From account ID</label>
+        <input id="fromAccountId" type="number" min="1" required>
+
+        <label for="toAccountNumber">Destination account number</label>
+        <input id="toAccountNumber" type="text" maxlength="40" required>
+
+        <label for="amount">Amount</label>
+        <input id="amount" type="number" min="0.01" step="0.01" required>
+
+        <label for="description">Description</label>
+        <input id="description" type="text" maxlength="120">
+
+        <button type="submit">Transfer money</button>
+    </form>
+
+    <h2>Recent transfers</h2>
+    <div id="transfers"></div>
+</main>
+<script>
+    const TRANSFER_API="/api/transfers";
+
+    async function request(url,options={}){
+        const response=await fetch(url,{credentials:"same-origin",...options,headers:{Accept:"application/json",...(options.headers??{})}});
+        if(response.status===401){window.location.href="/login";return null;}
+        if(response.status===403)throw new Error("You do not have permission to perform this transfer.");
+        if(!response.ok)throw new Error(`Request failed with status ${response.status}.`);
+        if(response.status===204)return null;
+        return response.json();
+    }
+
+    async function loadTransfers(){
+        const container=document.getElementById("transfers");
+        const transfers=await request(TRANSFER_API);
+        if(!transfers)return;
+        container.replaceChildren();
+        if(!Array.isArray(transfers)||!transfers.length){container.textContent="No transfers found.";return;}
+        transfers.forEach(transfer=>{
+            const item=document.createElement("article");
+            const title=document.createElement("h3");
+            title.textContent=`Transfer #${transfer.id??"N/A"}`;
+            const detail=document.createElement("p");
+            detail.textContent=`${transfer.fromAccountNumber??transfer.fromAccountId??"N/A"} → ${transfer.toAccountNumber??"N/A"} | $${Number(transfer.amount??0).toFixed(2)} | ${transfer.status??"PENDING"}`;
+            item.append(title,detail);container.appendChild(item);
+        });
+    }
+
+    document.getElementById("transferForm").addEventListener("submit",async event=>{
+        event.preventDefault();
+        const message=document.getElementById("message");
+        try{
+            await request(TRANSFER_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+                    fromAccountId:Number(document.getElementById("fromAccountId").value),
+                    toAccountNumber:document.getElementById("toAccountNumber").value.trim(),
+                    amount:Number(document.getElementById("amount").value),
+                    description:document.getElementById("description").value.trim()
+                })});
+            event.currentTarget.reset();message.textContent="Transfer submitted successfully.";await loadTransfers();
+        }catch(error){message.textContent=error.message;console.error(error);}
+    });
+
+    loadTransfers().catch(error=>{document.getElementById("message").textContent=error.message;console.error(error);});
+</script>
+</body>
+</html>

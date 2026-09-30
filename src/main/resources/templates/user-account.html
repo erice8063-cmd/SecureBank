@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SecureBank - My Account</title>
+
+</head>
+
+<body>
+
+<header>
+    <h1>SecureBank</h1>
+
+    <nav>
+        <a href="/home">Dashboard</a>
+        <a href="/banking-accounts">Accounts</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/transfers">Transfers</a>
+        <a href="/loans">Loans</a>
+        <a href="/user-account-page">My Account</a>
+        <form action="/logout" method="post">
+            <button type="submit">Logout</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+
+    <h2>My Account</h2>
+
+    <!-- User Information -->
+
+    <section class="account-section">
+
+        <h3>Personal Information</h3>
+
+        <p>
+            <strong>Name:</strong>
+            <span th:text="${user.firstName + ' ' + user.lastName}">
+                John Smith
+            </span>
+        </p>
+
+        <p>
+            <strong>Username:</strong>
+            <span th:text="${user.username}">
+                johnsmith
+            </span>
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            <span th:text="${user.email}">
+                john@example.com
+            </span>
+        </p>
+
+        <a href="/user-account/edit" class="button">
+            Edit Profile
+        </a>
+
+    </section>
+
+
+    <!-- Bank Accounts -->
+
+    <section class="account-section">
+
+        <h3>My Bank Accounts</h3>
+
+        <div class="bank-account">
+
+            <h4>Checking Account</h4>
+
+            <p>Account Number: ****1234</p>
+
+            <p>Available Balance:</p>
+
+            <h2 th:text="'$' + ${checkingBalance}">
+                $2,450.75
+            </h2>
+
+            <a href="/banking-accounts" class="button">View Account</a>
+
+        </div>
+
+
+        <div class="bank-account">
+
+            <h4>Savings Account</h4>
+
+            <p>Account Number: ****5678</p>
+
+            <p>Available Balance:</p>
+
+            <h2 th:text="'$' + ${savingsBalance}">
+                $8,725.40
+            </h2>
+
+            <a href="/banking-accounts" class="button">View Account</a>
+
+        </div>
+
+    </section>
+
+
+    <!-- Account Actions -->
+
+    <section class="account-section">
+
+        <h3>Account Services</h3>
+
+        <a href="/transactions" class="button">
+            Deposits & Withdrawals
+        </a>
+
+        <a href="/transfers" class="button">
+            Transfer Money
+        </a>
+
+        <a href="/loans" class="button">
+            Manage Loans
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+</html>

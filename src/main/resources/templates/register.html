@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <title>SecureBank - Register</title>
+</head>
+
+<body>
+
+<main>
+    <h1>Create SecureBank Account</h1>
+
+    <p
+            th:if="${error}"
+            th:text="${error}"
+            class="error"
+    ></p>
+
+    <form
+            method="post"
+            action="/register"
+            th:object="${user}"
+    >
+        <label for="name">
+            Name
+        </label>
+
+        <input
+                id="name"
+                type="text"
+                th:field="*{name}"
+                maxlength="100"
+                required
+        >
+
+        <label for="username">
+            Username
+        </label>
+
+        <input
+                id="username"
+                type="text"
+                th:field="*{username}"
+                minlength="3"
+                maxlength="60"
+                autocomplete="username"
+                required
+        >
+
+        <label for="email">
+            Email
+        </label>
+
+        <input
+                id="email"
+                type="email"
+                th:field="*{email}"
+                maxlength="120"
+                required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+                id="password"
+                type="password"
+                th:field="*{password}"
+                minlength="8"
+                maxlength="72"
+                autocomplete="new-password"
+                required
+        >
+
+        <!-- Do not place a role field in this form. -->
+
+        <button type="submit">
+            Register
+        </button>
+    </form>
+
+    <p>
+        Already registered?
+        <a href="/login">Login</a>
+    </p>
+</main>
+
+</body>
+</html>

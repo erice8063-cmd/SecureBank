@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.2
+      embedding:
+        model: nomic-embed-text
+
+    mcp:
+      server:
+        enabled: true
+        name: securebank
+        version: 1.0.0
+        type: SYNC
+        protocol: STREAMABLE
+        capabilities:
+          tool: true
+        streamable-http:
+          mcp-endpoint: /mcp
+
+server:
+  address: 127.0.0.1
+  port: 8080

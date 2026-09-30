@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Teller Dashboard | SecureBank
+    </title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/dashboard.js" defer></script>
+</head>
+
+<body data-role="TELLER">
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">
+                SB
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    SecureBank
+                </div>
+
+                <div class="brand-caption">
+                    Teller Operations
+                </div>
+            </div>
+        </div>
+
+        <div class="role-label">
+            Teller menu
+        </div>
+
+        <nav
+                class="navigation"
+                aria-label="Teller navigation"
+        >
+            <a
+                    class="nav-link active"
+                    href="/teller-dashboard"
+            >
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/customer-account-page"
+            >
+                <span class="nav-icon">⌕</span>
+                Find customer
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/banking-accounts"
+            >
+                <span class="nav-icon">▣</span>
+                Accounts
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/loans"
+            >
+                <span class="nav-icon">◇</span>
+                Loans
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/transactions"
+            >
+                <span class="nav-icon">↕</span>
+                Transactions
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/transfers"
+            >
+                <span class="nav-icon">⇄</span>
+                Transfers
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/payments"
+            >
+                <span class="nav-icon">$</span>
+                Payments
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/user-account-page"
+            >
+                <span class="nav-icon">○</span>
+                My profile
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <form
+                    class="logout-form"
+                    action="/logout"
+                    method="post"
+            >
+                <button
+                        class="logout-button"
+                        type="submit"
+                >
+                    Log out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="page-heading">
+                <h1>Teller Dashboard</h1>
+
+                <p>
+                    Process and review customer banking activity.
+                </p>
+            </div>
+
+            <div class="user-summary">
+
+                <div
+                        class="user-avatar"
+                        id="dashboardUserInitial"
+                >
+                    T
+                </div>
+
+                <div class="user-details">
+                    <strong id="dashboardUserName">
+                        Loading...
+                    </strong>
+
+                    <span id="dashboardUserEmail">
+                        Loading teller account
+                    </span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="content">
+
+            <section class="welcome-panel">
+
+                <div>
+                    <h2>Teller workspace</h2>
+
+                    <p id="dashboardMessage">
+                        Loading your teller dashboard...
+                    </p>
+
+                    <p
+                            id="dashboardError"
+                            hidden
+                            role="alert"
+                    ></p>
+                </div>
+
+                <div class="welcome-badge">
+                    TELLER
+                </div>
+
+            </section>
+
+            <section
+                    class="stats-grid"
+                    aria-label="Teller activity summary"
+            >
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Total customers
+                        </span>
+
+                        <span class="stat-icon blue">
+                            ○
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalCustomers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Registered customers
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Customers served
+                        </span>
+
+                        <span class="stat-icon green">
+                            ✓
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="customersServed"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        During this session
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Transactions processed
+                        </span>
+
+                        <span class="stat-icon orange">
+                            ↕
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="transactionsProcessed"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Processed today
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Pending reviews
+                        </span>
+
+                        <span class="stat-icon purple">
+                            !
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="pendingReviews"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Require teller attention
+                    </div>
+
+                </article>
+
+            </section>
+
+            <section class="content-grid">
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>Teller actions</h2>
+                    </div>
+
+                    <div class="action-grid">
+
+                        <a
+                                class="action-card"
+                                href="/customer-account-page"
+                        >
+                            <div class="action-icon">
+                                ⌕
+                            </div>
+
+                            <h3>Find customer</h3>
+
+                            <p>
+                                Search for a customer and review
+                                their banking profile.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/banking-accounts"
+                        >
+                            <div class="action-icon">
+                                ▣
+                            </div>
+
+                            <h3>Manage accounts</h3>
+
+                            <p>
+                                Review customer accounts and
+                                account status.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/transactions"
+                        >
+                            <div class="action-icon">
+                                ↕
+                            </div>
+
+                            <h3>Process transaction</h3>
+
+                            <p>
+                                Record deposits, withdrawals and
+                                other transactions.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/transfers"
+                        >
+                            <div class="action-icon">
+                                ⇄
+                            </div>
+
+                            <h3>Process transfer</h3>
+
+                            <p>
+                                Transfer funds between approved
+                                customer accounts.
+                            </p>
+                        </a>
+
+                    </div>
+
+                </article>
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>Session activity</h2>
+                    </div>
+
+                    <ul class="activity-list">
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Teller session active
+                                </strong>
+
+                                <span>
+                                    The teller workspace is ready.
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Customer verification
+                                </strong>
+
+                                <span>
+                                    Verify customer identity before
+                                    making account changes.
+                                </span>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </article>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

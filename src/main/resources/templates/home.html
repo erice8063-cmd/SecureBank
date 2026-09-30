@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+    <title>SecureBank Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<h1>Welcome to SecureBank</h1>
+
+<h2>Banking Menu</h2>
+
+<nav>
+
+    <p>
+        <a href="/banking-accounts">
+            Banking Accounts
+        </a>
+    </p>
+
+    <p>
+        <a href="/customer-account-page">
+            Customer Account
+        </a>
+    </p>
+
+    <p>
+        <a href="/loans">
+            Loans
+        </a>
+    </p>
+
+    <p>
+        <a href="/payments">
+            Loan Payments
+        </a>
+    </p>
+
+    <p>
+        <a href="/transactions">
+            Transactions
+        </a>
+    </p>
+
+    <p>
+        <a href="/transfers">
+            Transfers
+        </a>
+    </p>
+
+    <p>
+        <a href="/user-page">
+            Users
+        </a>
+    </p>
+
+    <p>
+        <a href="/user-account-page">
+            User Accounts
+        </a>
+    </p>
+
+</nav>
+
+<script>
+
+    fetch("/api/users/me", {
+        credentials: "same-origin",
+        headers: { "Accept": "application/json" }
+    })
+        .then(response => {
+            if (response.status === 401) {
+                window.location.href = "/login";
+                return null;
+            }
+            if (!response.ok) throw new Error("Unable to load the signed-in user.");
+            return response.json();
+        })
+        .then(user => {
+            if (!user) return;
+            const rawRole = user.role ?? user.authority
+                ?? user.roles?.[0]?.name ?? user.roles?.[0]?.authority
+                ?? user.roles?.[0] ?? "CUSTOMER";
+            const role = String(rawRole).toUpperCase().replace("ROLE_", "");
+            const dashboard = {
+                CUSTOMER: "/customer-dashboard",
+                TELLER: "/teller-dashboard",
+                ADMIN: "/admin-dashboard"
+            }[role];
+            if (dashboard) window.location.href = dashboard;
+        })
+        .catch(error => console.error(error));
+
+</script>
+
+</body>
+</html>

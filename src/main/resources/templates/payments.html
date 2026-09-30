@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SecureBank - Loan Payment</title>
+
+</head>
+
+<body>
+
+<h1>Make Loan Payment</h1>
+
+<p id="balance">
+    Current Balance: Loading...
+</p>
+
+<form id="paymentForm">
+
+    <label for="loanId">
+        Loan ID:
+    </label>
+
+    <input
+            type="number"
+            id="loanId"
+            required
+    >
+
+    <br><br>
+
+    <label for="amount">
+        Payment Amount:
+    </label>
+
+    <input
+            type="number"
+            id="amount"
+            min="1"
+            step="0.01"
+            required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Make Payment
+    </button>
+
+</form>
+
+<p id="message"></p>
+
+<script>
+
+    const PAYMENT_API = "/api/loan-payments";
+
+
+    document
+        .getElementById("paymentForm")
+        .addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+                const payment = {
+
+                    loanId:
+                        Number(
+                            document.getElementById(
+                                "loanId"
+                            ).value
+                        ),
+
+                    amount:
+                        Number(
+                            document.getElementById(
+                                "amount"
+                            ).value
+                        )
+                };
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            PAYMENT_API,
+                            {
+                                method: "POST",
+                                credentials: "same-origin",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+                                    "Accept":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(payment)
+                            }
+                        );
+
+
+                    if (response.status === 401) {
+                        window.location.href = "/login";
+                        return;
+                    }
+
+                    if (response.status === 403) {
+                        throw new Error(
+                            "You do not have permission to make this payment."
+                        );
+                    }
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Payment failed"
+                        );
+
+                    }
+
+
+                    document.getElementById(
+                        "message"
+                    ).innerText =
+                        "Payment completed successfully.";
+
+                    document
+                        .getElementById(
+                            "paymentForm"
+                        )
+                        .reset();
+
+
+                } catch (error) {
+
+                    document.getElementById(
+                        "message"
+                    ).innerText =
+                        error.message;
+
+                    console.error(error);
+                }
+
+            }
+        );
+
+</script>
+
+</body>
+</html>

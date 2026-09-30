@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Administrator Dashboard | SecureBank
+    </title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/dashboard.js" defer></script>
+</head>
+
+<body data-role="ADMIN">
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">
+                SB
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    SecureBank
+                </div>
+
+                <div class="brand-caption">
+                    Administration
+                </div>
+            </div>
+        </div>
+
+        <div class="role-label">
+            Administrator menu
+        </div>
+
+        <nav
+                class="navigation"
+                aria-label="Administrator navigation"
+        >
+            <a
+                    class="nav-link active"
+                    href="/admin-dashboard"
+            >
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/user-page"
+            >
+                <span class="nav-icon">○</span>
+                User management
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/customer-account-page"
+            >
+                <span class="nav-icon">⌕</span>
+                Customers
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/banking-accounts"
+            >
+                <span class="nav-icon">▣</span>
+                Bank accounts
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/transactions"
+            >
+                <span class="nav-icon">↕</span>
+                Transactions
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/loans"
+            >
+                <span class="nav-icon">◇</span>
+                Loans
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/user-account-page"
+            >
+                <span class="nav-icon">⚙</span>
+                Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <form
+                    class="logout-form"
+                    action="/logout"
+                    method="post"
+            >
+                <button
+                        class="logout-button"
+                        type="submit"
+                >
+                    Log out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="page-heading">
+                <h1>Administrator Dashboard</h1>
+
+                <p>
+                    Manage SecureBank users and operations.
+                </p>
+            </div>
+
+            <div class="user-summary">
+
+                <div
+                        class="user-avatar"
+                        id="dashboardUserInitial"
+                >
+                    A
+                </div>
+
+                <div class="user-details">
+                    <strong id="dashboardUserName">
+                        Loading...
+                    </strong>
+
+                    <span id="dashboardUserEmail">
+                        Loading administrator account
+                    </span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="content">
+
+            <section class="welcome-panel">
+
+                <div>
+                    <h2>System administration</h2>
+
+                    <p id="dashboardMessage">
+                        Loading your administrator dashboard...
+                    </p>
+
+                    <p
+                            id="dashboardError"
+                            hidden
+                            role="alert"
+                    ></p>
+                </div>
+
+                <div class="welcome-badge">
+                    ADMIN
+                </div>
+
+            </section>
+
+            <section
+                    class="stats-grid"
+                    aria-label="System summary"
+            >
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Total users
+                        </span>
+
+                        <span class="stat-icon blue">
+                            ○
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalUsers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Registered system users
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Customers
+                        </span>
+
+                        <span class="stat-icon green">
+                            C
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalCustomers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Customer accounts
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Tellers
+                        </span>
+
+                        <span class="stat-icon orange">
+                            T
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalTellers"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Teller accounts
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Administrators
+                        </span>
+
+                        <span class="stat-icon purple">
+                            A
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="totalAdmins"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Administrator accounts
+                    </div>
+
+                </article>
+
+            </section>
+
+            <section class="content-grid">
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>Administrative actions</h2>
+                    </div>
+
+                    <div class="action-grid">
+
+                        <a
+                                class="action-card"
+                                href="/user-page"
+                        >
+                            <div class="action-icon">
+                                ○
+                            </div>
+
+                            <h3>Manage users</h3>
+
+                            <p>
+                                Review users and assign customer,
+                                teller or administrator roles.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/customer-account-page"
+                        >
+                            <div class="action-icon">
+                                ⌕
+                            </div>
+
+                            <h3>Review customers</h3>
+
+                            <p>
+                                Find customers and review their
+                                banking information.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/banking-accounts"
+                        >
+                            <div class="action-icon">
+                                ▣
+                            </div>
+
+                            <h3>Review accounts</h3>
+
+                            <p>
+                                Monitor bank accounts and account
+                                status.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/transactions"
+                        >
+                            <div class="action-icon">
+                                ↕
+                            </div>
+
+                            <h3>Review transactions</h3>
+
+                            <p>
+                                Inspect transactions recorded
+                                throughout the system.
+                            </p>
+                        </a>
+
+                    </div>
+
+                </article>
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>System activity</h2>
+                    </div>
+
+                    <ul class="activity-list">
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    System available
+                                </strong>
+
+                                <span>
+                                    SecureBank services are
+                                    currently accessible.
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Role management
+                                </strong>
+
+                                <span>
+                                    Verify role assignments before
+                                    saving user changes.
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Secure session
+                                </strong>
+
+                                <span>
+                                    Administrator authentication
+                                    is active.
+                                </span>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </article>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

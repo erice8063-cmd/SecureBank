@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | SecureBank</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<main>
+    <h1>User Management</h1>
+    <p><a href="/admin-dashboard">Return to administrator dashboard</a></p>
+    <p id="message" role="status">Loading users...</p>
+    <div id="users"></div>
+</main>
+<script>
+    async function loadUsers(){
+        const message=document.getElementById("message");
+        const response=await fetch("/api/users",{credentials:"same-origin",headers:{Accept:"application/json"}});
+        if(response.status===401){window.location.href="/login";return;}
+        if(response.status===403){message.textContent="Administrator access is required.";return;}
+        if(!response.ok){message.textContent=`Unable to load users. Status: ${response.status}.`;return;}
+
+        const users=await response.json();
+        const container=document.getElementById("users");
+        container.replaceChildren();
+        if(!Array.isArray(users)||!users.length){container.textContent="No users found.";message.hidden=true;return;}
+
+        users.forEach(user=>{
+            const card=document.createElement("article");
+            const heading=document.createElement("h2");
+            heading.textContent=user.name??user.username??user.email??`User #${user.id}`;
+            const email=document.createElement("p");
+            email.textContent=`Email: ${user.email??"N/A"}`;
+            const role=document.createElement("p");
+            role.textContent=`Role: ${user.role??user.roles?.[0]?.name??user.roles?.[0]??"N/A"}`;
+            card.append(heading,email,role);container.appendChild(card);
+        });
+        message.hidden=true;
+    }
+    loadUsers().catch(error=>{document.getElementById("message").textContent="Unable to load users.";console.error(error);});
+</script>
+</body>
+</html>

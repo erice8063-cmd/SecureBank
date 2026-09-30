@@ -1,0 +1,10 @@
+  target/
+    .idea/
+    .vscode/
+    .DS_Store
+    *.iml
+    *.iws
+    *.ipr
+    .env
+    .env.*
+    !.env.example

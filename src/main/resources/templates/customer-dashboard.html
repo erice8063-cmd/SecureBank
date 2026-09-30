@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Customer Dashboard | SecureBank
+    </title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/dashboard.js" defer></script>
+</head>
+
+<body data-role="CUSTOMER">
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">
+                SB
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    SecureBank
+                </div>
+
+                <div class="brand-caption">
+                    Personal Banking
+                </div>
+            </div>
+        </div>
+
+        <div class="role-label">
+            Customer menu
+        </div>
+
+        <nav
+                class="navigation"
+                aria-label="Customer navigation"
+        >
+            <a
+                    class="nav-link active"
+                    href="/customer-dashboard"
+            >
+                <span class="nav-icon">⌂</span>
+                Dashboard
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/banking-accounts"
+            >
+                <span class="nav-icon">▣</span>
+                My accounts
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/transactions"
+            >
+                <span class="nav-icon">↕</span>
+                Transactions
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/transfers"
+            >
+                <span class="nav-icon">⇄</span>
+                Transfers
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/payments"
+            >
+                <span class="nav-icon">$</span>
+                Payments
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/loans"
+            >
+                <span class="nav-icon">◇</span>
+                Loans
+            </a>
+
+            <a
+                    class="nav-link"
+                    href="/user-account-page"
+            >
+                <span class="nav-icon">○</span>
+                My profile
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <form
+                    class="logout-form"
+                    action="/logout"
+                    method="post"
+            >
+                <button
+                        class="logout-button"
+                        type="submit"
+                >
+                    Log out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="page-heading">
+                <h1>Customer Dashboard</h1>
+
+                <p>
+                    Manage your everyday banking.
+                </p>
+            </div>
+
+            <div class="user-summary">
+
+                <div
+                        class="user-avatar"
+                        id="dashboardUserInitial"
+                >
+                    C
+                </div>
+
+                <div class="user-details">
+                    <strong id="dashboardUserName">
+                        Loading...
+                    </strong>
+
+                    <span id="dashboardUserEmail">
+                        Loading account
+                    </span>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="content">
+
+            <section class="welcome-panel">
+
+                <div>
+                    <h2>
+                        Welcome to SecureBank
+                    </h2>
+
+                    <p id="dashboardMessage">
+                        Loading your customer dashboard...
+                    </p>
+
+                    <p
+                            id="dashboardError"
+                            hidden
+                            role="alert"
+                    ></p>
+                </div>
+
+                <div class="welcome-badge">
+                    CUSTOMER
+                </div>
+
+            </section>
+
+            <section
+                    class="stats-grid"
+                    aria-label="Customer account summary"
+            >
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Active accounts
+                        </span>
+
+                        <span class="stat-icon blue">
+                            ▣
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="activeAccounts"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Open banking accounts
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Pending transactions
+                        </span>
+
+                        <span class="stat-icon orange">
+                            ↻
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="pendingTransactions"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Transactions processing
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Active loans
+                        </span>
+
+                        <span class="stat-icon purple">
+                            ◇
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="activeLoans"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Current loan accounts
+                    </div>
+
+                </article>
+
+                <article class="stat-card">
+
+                    <div class="stat-header">
+                        <span class="stat-title">
+                            Scheduled payments
+                        </span>
+
+                        <span class="stat-icon green">
+                            $
+                        </span>
+                    </div>
+
+                    <div
+                            class="stat-value"
+                            id="scheduledPayments"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-caption">
+                        Upcoming payments
+                    </div>
+
+                </article>
+
+            </section>
+
+            <section class="content-grid">
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>Quick actions</h2>
+                    </div>
+
+                    <div class="action-grid">
+
+                        <a
+                                class="action-card"
+                                href="/transfers"
+                        >
+                            <div class="action-icon">
+                                ⇄
+                            </div>
+
+                            <h3>Transfer money</h3>
+
+                            <p>
+                                Move funds securely between
+                                available accounts.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/payments"
+                        >
+                            <div class="action-icon">
+                                $
+                            </div>
+
+                            <h3>Make a payment</h3>
+
+                            <p>
+                                Submit and review account
+                                payments.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/transactions"
+                        >
+                            <div class="action-icon">
+                                ↕
+                            </div>
+
+                            <h3>View transactions</h3>
+
+                            <p>
+                                Review deposits, purchases
+                                and withdrawals.
+                            </p>
+                        </a>
+
+                        <a
+                                class="action-card"
+                                href="/user-account-page"
+                        >
+                            <div class="action-icon">
+                                ○
+                            </div>
+
+                            <h3>Account settings</h3>
+
+                            <p>
+                                Review your profile and account
+                                information.
+                            </p>
+                        </a>
+
+                    </div>
+
+                </article>
+
+                <article class="panel">
+
+                    <div class="panel-header">
+                        <h2>Account activity</h2>
+
+                        <a href="/transactions">
+                            View all
+                        </a>
+                    </div>
+
+                    <ul class="activity-list">
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Dashboard connected
+                                </strong>
+
+                                <span>
+                                    Your account information is
+                                    loaded securely from SecureBank.
+                                </span>
+                            </div>
+                        </li>
+
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+
+                            <div class="activity-content">
+                                <strong>
+                                    Security reminder
+                                </strong>
+
+                                <span>
+                                    Never share your password with
+                                    another person.
+                                </span>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </article>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

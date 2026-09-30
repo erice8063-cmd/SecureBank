@@ -1,0 +1,42 @@
+SECUREBANK — POLICIES AND TERMS OF USE
+Effective date: September 29, 2026
+
+1. ABOUT SECUREBANK
+
+SecureBank is a demonstration banking application. It allows users to view accounts and transactions, make simulated deposits, withdrawals, and transfers, and manage loan information. Balances and transactions in this project are simulated. SecureBank does not hold real money or provide real banking services.
+
+2. USER ACCOUNTS
+
+Users must provide accurate information when creating or updating an account. Each user is responsible for keeping their login credentials private and for reporting suspected unauthorized access to the project administrator.
+
+3. ACCESS AND ROLES
+
+Customers may access their own account information and the features assigned to them. Tellers and administrators may access additional features required for their roles, including reviewing accounts, transactions, loans, and user records. Users must not attempt to access information or functions outside their assigned role.
+
+4. TRANSACTIONS AND TRANSFERS
+
+Deposits, withdrawals, and transfers made in SecureBank affect simulated balances only. Users should review transaction details before submitting them. A transaction may be rejected if the account is restricted, the information is invalid, or sufficient simulated funds are unavailable. Report incorrect or unexpected records to the project administrator.
+
+5. LOANS
+
+Loan applications, balances, and repayments shown in SecureBank are for demonstration purposes. They do not create a real loan or a legal obligation to repay money.
+
+6. ACCEPTABLE USE
+
+Users must not share accounts, impersonate another person, attempt to bypass security controls, alter records without authorization, or use SecureBank to disrupt the application or access another user's information.
+
+7. PRIVACY AND DATA
+
+SecureBank may store information entered by users, including names, contact details, account records, transaction history, and loan information. This information is used to operate and demonstrate the application's features. Authorized staff roles may view information needed to perform their assigned tasks. Do not enter real banking credentials, payment card numbers, or other sensitive financial information into this demonstration project.
+
+8. SECURITY AND ACCOUNT RESTRICTIONS
+
+Access may be suspended or restricted when misuse, unauthorized activity, or a security issue is suspected. Users should sign out after using a shared device and report suspected security problems promptly.
+
+9. AVAILABILITY AND CHANGES
+
+Because SecureBank is a project application, features and stored demonstration data may change or be reset. These terms may be updated as the project develops. The effective date above indicates when this version was prepared.
+
+10. QUESTIONS OR PROBLEMS
+
+For questions, incorrect records, or suspected unauthorized access, contact the SecureBank project administrator through the contact method provided with the application.
