@@ -4,47 +4,11 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  permissions:
-    contents: read
   test-and-build:
-    publish-image:
-      needs: test-and-build
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      runs-on: ubuntu-latest
-
-      permissions:
-        contents: read
-        packages: write
-
-      env:
-        IMAGE: ghcr.io/erice8063-cmd/securebank
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      steps:
-        - name: Check out code
-          uses: actions/checkout@v7
-
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v4
-
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v4
-
-        - name: Log in to GitHub Container Registry
-          run: printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
-
-        - name: Build and publish image
-          uses: docker/build-push-action@v7
-          with:
-            context: .
-            platforms: linux/amd64,linux/arm64
-            push: true
-            tags: |
-              ${{ env.IMAGE }}:${{ github.sha }}
-              ${{ env.IMAGE }}:latest
-            labels: |
-              org.opencontainers.image.source=https://github.com/${{ github.repository }}
     runs-on: ubuntu-latest
 
     services:
@@ -86,3 +50,41 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t securebank:ci .
+
+  publish-image:
+    needs: test-and-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      IMAGE: ghcr.io/erice8063-cmd/securebank
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GitHub Container Registry
+        run: printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Build and publish image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
